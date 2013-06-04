@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:WindowedApplication xmlns:fx="http://ns.adobe.com/mxml/2009"
+                       xmlns:s="library://ns.adobe.com/flex/spark"
+                       xmlns:mx="library://ns.adobe.com/flex/mx"
+                        xmlns:local="*" xmlns:components="components.*"
+                        creationComplete="windowedapplication1_creationCompleteHandler(event)">
+    
+    <fx:Script>
+        <![CDATA[
+            import mx.events.FlexEvent;
+            protected function stopWatch_fontSizeChangedHandler(event:Event):void
+            {
+                // TODO Auto-generated method stub
+                
+            }
+            
+            protected function windowedapplication1_creationCompleteHandler(event:FlexEvent):void
+            {
+                // TODO Auto-generated method stub
+/*                 addEventListener("fontSizeChanged", Function, false, 0, true); */
+                //removeEventListener("fontSizeChanged",function);
+            }
+            
+        ]]>
+    </fx:Script>
+    
+    
+    <!--using actionscript-->
+    <components:StopWatchAS id="stopWatch" fontSizeChanged="stopWatch_fontSizeChangedHandler(event)" width="100%" height="100%" swFontSize="{int(txtFont.text)}"/>
+    <s:TextInput id="txtFont" x="47" y="14"/>
+    <s:Label id="txtTimer" x="47" y="44" width="128" height="21"
+             text="{stopWatch.min+':'+stopWatch.sec+':'+stopWatch.millisec}"/>
+
+</s:WindowedApplication>

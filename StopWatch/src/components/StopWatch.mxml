@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+         xmlns:s="library://ns.adobe.com/flex/spark" 
+         xmlns:mx="library://ns.adobe.com/flex/mx" width="400" height="300" creationComplete="init()">
+    <fx:Declarations>
+        <!-- Place non-visual elements (e.g., services, value objects) here -->
+    </fx:Declarations>
+    
+    <fx:Metadata>
+        [Event(name="startClicked", type="flash.events.Event")]
+        [Event(name="stopClicked", type="flash.events.Event")]
+        [Event(name="resetClicked", type="flash.events.Event")]
+        [Event(name="millisecChange", type="flash.events.Event")]
+        [Event(name="minChange", type="flash.events.Event")]
+        [Event(name="secChange", type="flash.events.Event")]
+    </fx:Metadata>
+    
+    <fx:Style>
+        @namespace s "library://ns.adobe.com/flex/spark";
+        @namespace mx "library://ns.adobe.com/flex/mx";
+        .time{
+            textAlign:center;
+        }
+    </fx:Style>
+    
+    <fx:Script>
+        <![CDATA[
+            import flash.utils.getTimer;
+            
+            import org.osmf.events.TimeEvent;
+            
+            [Bindable]private var _min:int=00;
+            [Bindable]private var _sec:int=00;
+            [Bindable]private var _millisec:int=00;
+            [Bindable]private var _swFontSize:int=50;
+            
+            private var _stopTime:Number=0;
+            private var _startTime:Number=0;
+            private var _timer:Timer;
+            private var _date:Date;
+            
+            
+            private function init():void{
+                _timer=new Timer(10);
+                _timer.addEventListener(TimerEvent.TIMER,processTimer);
+            }
+            
+            private function processTimer(event:TimerEvent):void{
+                _date=new Date(getTimer()-_startTime+_stopTime);
+                _min=_date.minutes;
+                _sec=_date.seconds;
+                _millisec=_date.milliseconds;
+            }
+            
+            public function startTimer():void{    
+                _startTime=getTimer();
+                _timer.start();
+                dispatchEvent(new Event("clickedStart"));
+            }
+            
+            public function stopTimer():void{
+                _stopTime=_min * 60000 + _sec * 1000 + _millisec;                
+                _timer.stop();
+                dispatchEvent(new Event("clickedStop"));
+            }
+            
+            public function reset():void{
+                _timer.stop();
+                
+                _startTime=0;
+                _stopTime=0;                  
+                _min=0;
+                _sec=0;
+                _millisec=0;   
+                dispatchEvent(new Event("clickedReset"));
+            }           
+            
+            //adds zero to the value when the digit is one ex. 1 will return 01
+            public function zeroPad(number:int):String {
+                var ret:String = ""+number;
+                while( ret.length < 2 )
+                    ret="0" + ret;
+                return ret;
+            }
+
+            [Bindable(event="millisecChange")]
+            public function get millisec():int
+            {
+                return _millisec;
+            }
+
+            public function set millisec(value:int):void
+            {
+                if( _millisec !== value)
+                {
+                    _millisec = value;
+                    dispatchEvent(new Event("millisecChange"));
+                }
+            }
+
+            [Bindable(event="minChange")]
+            public function get min():int
+            {
+                return _min;
+            }
+
+            public function set min(value:int):void
+            {
+                if( _min !== value)
+                {
+                    _min = value;
+                    dispatchEvent(new Event("minChange"));
+                }
+            }
+
+            [Bindable(event="secChange")]
+            public function get sec():int
+            {
+                return _sec;
+            }
+
+            public function set sec(value:int):void
+            {
+                if( _sec !== value)
+                {
+                    _sec = value;
+                    dispatchEvent(new Event("secChange"));
+                }
+            }
+
+            [Bindable]
+            public function get swFontSize():int
+            {
+                return _swFontSize;
+            }
+
+            public function set swFontSize(value:int):void
+            {
+                _swFontSize = value;
+            }
+
+
+        ]]>
+    </fx:Script>
+    <s:VGroup width="100%" height="100%" >
+        
+        <s:HGroup verticalAlign="middle" width="100%" height="60%" horizontalAlign="center">
+            <s:Label id="lblMinutes" text="{zeroPad(_min)}" styleName="time" width="20%" fontSize="{_swFontSize}"/>
+            <s:Label text=":" styleName="time" fontSize="{_swFontSize}"/>
+            <s:Label id="lblSeconds" text="{zeroPad(_sec)}" styleName="time" width="20%" fontSize="{_swFontSize}"/>
+            <s:Label text=":" styleName="time" fontSize="{_swFontSize}"/>
+            <s:Label id="lblMili" text="{zeroPad(_millisec)}" styleName="time" width="20%" fontSize="{_swFontSize}"/>
+        </s:HGroup>           
+        
+        <s:HGroup width="100%" height="40%" verticalAlign="middle" horizontalAlign="center">            
+            <s:Button id="btnStart" label="Start" width="20%" height="30%" click="startTimer()"/>
+            <s:Button id="btnStop"  label="Stop"  width="20%" height="30%" click="stopTimer()"/>
+            <s:Button id="btnReset" label="Reset" width="20%" height="30%" click="reset()"/>          
+        </s:HGroup>
+        
+    </s:VGroup>
+</s:Group>
