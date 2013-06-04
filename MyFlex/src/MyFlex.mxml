@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:WindowedApplication xmlns:fx="http://ns.adobe.com/mxml/2009"
+                       xmlns:s="library://ns.adobe.com/flex/spark"
+                       xmlns:mx="library://ns.adobe.com/flex/mx"
+                       currentState="LogIn" skinClass="com.gm.components.MainSkin"
+                       width.LogIn="628" height.LogIn="456">
+    
+    <fx:Style source="stylesheets/main.css"/>    
+    <fx:Script source="MainScript.as" />
+    
+    
+    <fx:Declarations>        
+        <mx:DateFormatter id="dateFormat" formatString="MM/DD/YYYY"/>        
+    </fx:Declarations>
+    
+    <s:states>
+        <s:State name="RegisterForm"/>
+        <s:State name="LogIn"/>
+    </s:states>
+  <!--LOG IN STATE-->
+    <s:Panel includeIn="LogIn" styleName="login-panel">
+        <s:Form x="6" y="9" width="228" height="103">
+            <s:FormItem label="Username:" styleName="login-label">
+                <s:TextInput id="username" styleName="transparent"/>
+            </s:FormItem>
+            <s:FormItem label="Password:" styleName="login-label">
+                <s:TextInput id="password" styleName="transparent"/>
+            </s:FormItem>
+        </s:Form>
+        <mx:LinkButton styleName="login-label" x="17" y="136" width="89" label="Register" click="currentState= 'RegisterForm';"
+                       enabled="true"/>
+        <s:Button x="168" y="136" label="Log In" click="logIn(username.text,password.text)"/>
+        <s:controlBarContent />
+    </s:Panel>    
+    <!--END LOG IN STATE-->
+    
+    <!--REGISTER STATE-->
+    <s:Panel includeIn="RegisterForm" styleName="register-panel">
+        <s:Form x="10" y="10" width="314" height="212">
+            <s:FormItem label="First Name:">
+                <s:TextInput id="firstName" styleName="transparent"/>
+            </s:FormItem>
+            <s:FormItem label="Last Name:">
+                <s:TextInput id="lastName" styleName="transparent"/>
+            </s:FormItem>
+            <s:FormItem label="Email:">
+                <s:TextInput id="email" styleName="transparent"/>
+            </s:FormItem>
+            <s:FormItem label="Birth Date:">
+                <s:TextInput focusIn="chooseDate.visible=true" id="dateTextInput" styleName="transparent"/>
+                <mx:DateChooser id="chooseDate" visible="false" width="169" height="151" borderVisible="true"
+                                focusOut="chooseDate.visible=false"
+                                enabled="true" showToday="true" click="dateTextInput.text=dateFormat.format(chooseDate.selectedDate.toString())" />
+            </s:FormItem>
+        </s:Form>
+        <s:Button x="122" y="239" label="Cancel" click="currentState='LogIn'"/>
+        <s:Button x="449" y="240" label="Register" click="registerForm()"/>
+        <s:Form x="332" y="10" width="288" height="212">
+            <s:FormItem width="265" label="User Name:">
+                <s:TextInput id="registUser" styleName="transparent"/>
+            </s:FormItem>
+            <s:FormItem width="265" label="Password:">
+                <s:TextInput id="registPass" styleName="transparent"/>
+            </s:FormItem>
+            <s:FormItem width="265" label="Confirm Password:">
+                <s:TextInput id="registConfirmPass" styleName="transparent"/>
+            </s:FormItem>
+        </s:Form>
+        <s:controlBarContent />
+    </s:Panel>
+    <!--END REGISTER STATE-->
+</s:WindowedApplication>

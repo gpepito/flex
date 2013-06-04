@@ -1,0 +1,38 @@
+/* CSS file */
+@namespace s "library://ns.adobe.com/flex/spark";
+@namespace mx "library://ns.adobe.com/flex/mx";
+
+.login-panel,.register-panel{
+    skinClass:ClassReference("com.gm.components.CustomPanelSkin");
+    backgroundAlpha:0.2;
+    dropShadowVisible:true;
+    borderVisible:false;
+    cornerRadius:30;
+}
+.login-panel{
+    width:300;
+    height:219;
+    horizontalCenter:0;
+    title:Log In;
+    verticalCenter:0;
+}
+.login-label{
+    color:#ffffff;
+}
+.login-btn{
+    backgroundAlpha:0.6;
+    color:#ffffff;
+}
+/*------------register form-------------*/
+.register-panel{
+    top:29;
+    width:632;
+    height:304; 
+    horizontalCenter:0;
+    title:Register Form;
+}
+.transparent{
+    contentBackgroundAlpha:0.5;
+    borderVisible:false;
+    dropShadowVisible:true;
+}
