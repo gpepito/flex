@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:WindowedApplication xmlns:fx="http://ns.adobe.com/mxml/2009"
+                       xmlns:s="library://ns.adobe.com/flex/spark"
+                       xmlns:mx="library://ns.adobe.com/flex/mx"
+                       width="359" height="220" applicationComplete="initApp()">
+    <fx:Script>
+        <![CDATA[
+        public var velocityX:Number = 5;
+        public var velocityY:Number = 7;
+        public var padding:Number = 10;
+        
+        public function bounceHandler(event:BounceEvent):void {
+            trace("Bounce on " + event.side + " side");
+        }
+        
+        public function moveBox(event:Event):void {
+            box.x += velocityX;
+            box.y += velocityY;
+        
+        var limitLeft:Number = padding;
+        var limitRight:Number = stage.stageWidth - box.width - padding;
+        var limitTop:Number = padding;
+        var limitBottom:Number = stage.stageHeight - box.height - padding;
+        
+        trace("\nlimitLeft:"+limitLeft+
+              "\nlimitRight:"+limitRight+
+              "\nlimitTop:"+limitTop+
+              "\nlimitBottom:"+limitBottom+
+              "\nx:"+box.x+
+              "\ny:"+box.y);
+        if (box.x <= limitLeft) {
+        velocityX = Math.abs(velocityX);
+        box.dispatchEvent(new BounceEvent(BounceEvent.BOUNCE, "left"));
+        
+        }else if (box.x >= limitRight){
+        velocityX = -Math.abs(velocityX);
+        box.dispatchEvent(new BounceEvent(BounceEvent.BOUNCE, "right"));
+        }else{
+            trace("fell to else::::");
+        }
+        
+        if (box.y <= limitTop) {
+        velocityY = Math.abs(velocityY);
+        box.dispatchEvent(new BounceEvent(BounceEvent.BOUNCE, "top"));
+        
+        }else if (box.y >= limitBottom){
+        velocityY = -Math.abs(velocityY);
+        box.dispatchEvent(new BounceEvent(BounceEvent.BOUNCE, "bottom"));
+        }
+        else{
+            trace("fell to else::::::");
+        }
+        }
+        
+        public function initApp():void {
+            box.addEventListener(Event.ENTER_FRAME, moveBox);
+            addEventListener(BounceEvent.BOUNCE, bounceHandler);
+        }
+        ]]>
+    </fx:Script>
+    
+    <mx:Canvas id="box" width="20" height="20" x="20" y="20" backgroundColor="#800000" >
+    </mx:Canvas>
+</s:WindowedApplication>
