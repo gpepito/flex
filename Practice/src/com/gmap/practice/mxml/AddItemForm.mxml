@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:VGroup xmlns:fx="http://ns.adobe.com/mxml/2009" 
+          xmlns:s="library://ns.adobe.com/flex/spark" 
+          xmlns:mx="library://ns.adobe.com/flex/mx" width="300" height="250" xmlns:customvalidator="com.gmap.practice.customvalidator.*">
+    <fx:Declarations>
+        <customvalidator:TextCustomValidator id="titleValidator" property="text" source="{txtTitle}"/>        
+    </fx:Declarations>
+    <fx:Script>
+        <![CDATA[
+            import com.gmap.practice.customevents.AddItemFormEvent;
+            
+            import mx.collections.ArrayCollection;
+            import mx.events.ValidationResultEvent;
+            import mx.validators.ValidationResult;
+            
+            [Bindable] private var arrType:ArrayCollection=new ArrayCollection(["kids","adults"]);
+            [Bindable] private var arrGenre:ArrayCollection=new ArrayCollection(["romance","scifi","horror","fantasy"]);
+            
+            private var _xmlItem:XML=<book/>;
+            private var _isEmpty:Boolean=false;
+            
+            private function save():void{
+                titleValidator.enabled=true;
+                if(isValid()){
+                    _xmlItem.@genre=cboGenre.selectedItem;
+                    _xmlItem.@type=cboType.selectedItem;
+                    _xmlItem.@name=txtTitle.text.toString(); 
+                    _isEmpty=true;
+                    dispatchEvent(new AddItemFormEvent(AddItemFormEvent.EVENT_SAVE,false,false));
+                }else{
+                    txtTitle.setFocus();
+                }
+            }
+            
+            public function get isEmpty():Boolean{
+                return _isEmpty;
+            }
+            public function get xmlItem():XML
+            {      
+                var tempxml:XML=_xmlItem;                
+                clearForm();              
+                
+                return tempxml;
+                
+            }
+            private function isValid():Boolean{
+                if(titleValidator.validate().type==ValidationResultEvent.INVALID)
+                    return false;
+                if(txtTitle.text.toString()==""){
+                    return false;
+                }
+                return true;
+            }
+            public function clearForm():void{
+                _isEmpty=false;
+                txtTitle.text="";
+                cboType.selectedIndex=0;
+                cboGenre.selectedIndex=0;
+                _xmlItem=<book/>;
+                titleValidator.dispatchEvent(new ValidationResultEvent(ValidationResultEvent.VALID));
+                titleValidator.enabled=false;
+            }
+            
+        ]]>
+    </fx:Script>
+    <s:Form id="form1" width="100%" height="80%">
+        <s:FormHeading label="Add Item Form"/>
+        <s:FormItem width="100%" label="Title" skinClass="com.gmap.practice.skin.FormItemCustomSkin">
+            <s:TextInput width="80%" id="txtTitle"/>
+        </s:FormItem>
+        <s:FormItem label="Type" width="100%" skinClass="com.gmap.practice.skin.FormItemCustomSkin">
+            <s:DropDownList id="cboType" width="80%" dataProvider="{arrType}" selectedIndex="0"/>
+        </s:FormItem>
+        <s:FormItem label="Genre" width="100%" skinClass="com.gmap.practice.skin.FormItemCustomSkin">
+            <s:DropDownList id="cboGenre" width="80%" dataProvider="{arrGenre}" selectedIndex="0"/>
+        </s:FormItem>
+    </s:Form>
+    
+    <s:HGroup height="20%" width="100%" horizontalAlign="right" paddingRight="10" paddingTop="5">
+        <s:Button  label="Save" click="save()"/>
+    </s:HGroup>
+    
+</s:VGroup>

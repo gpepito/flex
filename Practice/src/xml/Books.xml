@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<books>
+	<list>
+		<book type="adult" genre="fantasy" name="Game of Thrones"/>
+		<book type="adult" genre="fantasy" name="Song of Ice and Fire"/>
+		<book type="adult" genre="fantasy" name="The Blade Itself"/>
+		<book type="adult" genre="fantasy" name="Gardens of the Moon"/>
+		<book type="adult" genre="fantasy" name="Malazan Book of the Fallen"/>
+		<book type="kids" genre="fantasy" name="Chronicles of Narnia"/>
+		<book type="kids" genre="fantasy" name="The Hobbit"/>
+		<book type="kids" genre="fantasy" name="Charlie and The Chocolate Factory"/>
+		<book type="kids" genre="fantasy" name="Ella Enchanted"/>
+		<book type="kids" genre="fantasy" name="The Wonderful Wizard of Oz"/>
+		<book type="kids" genre="fantasy" name="Inkheart"/>
+		<book type="kids" genre="fantasy" name="Alice in WonderLand"/>
+		<book type="kids" genre="fantasy" name="The Lightning Thief"/>
+		<book type="kids" genre="fantasy" name="The Black Cauldron"/>
+		<book type="adult" genre="romance" name="Fifty Shades of Grey"/>
+		<book type="adult" genre="romance" name="Beautiful Disaster"/>
+		<book type="adult" genre="romance" name="The Lightning Thief"/>
+		<book type="adult" genre="romance" name="Twilight"/>
+		<book type="adult" genre="romance" name="Vampire Academy"/>
+		<book type="adult" genre="romance" name="Dark Lover"/>
+		<book type="adult" genre="romance" name="The Host"/>
+		<book type="adult" genre="romance" name="Water for Elephants"/>
+		<book type="adult" genre="romance" name=" Forbidden"/>
+		<book type="kids" genre="scifi" name="Ender's Game"/>
+		<book type="kids" genre="scifi" name="The White Mountains"/>
+		<book type="kids" genre="scifi" name="Time of The Stars"/>
+		<book type="kids" genre="scifi" name="Code Name:Silence"/>
+		<book type="kids" genre="scifi" name="Evil Genius"/>
+	</list>
+</books>

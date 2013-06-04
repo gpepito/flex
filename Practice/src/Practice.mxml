@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:WindowedApplication xmlns:fx="http://ns.adobe.com/mxml/2009"
+                       xmlns:s="library://ns.adobe.com/flex/spark"
+                       xmlns:mx="library://ns.adobe.com/flex/mx"
+                       width="100%" height="100%" initialize="myservice.send()" applicationComplete="initial(event)" xmlns:mxml="com.gmap.practice.mxml.*">
+    
+    <fx:Declarations>
+        <!--<fx:XML id="booksXml" source="/xml/Books.xml"/>-->
+        <s:XMLListCollection id="booksCollection" source="{_bookXML.list.book}"/>        
+        <s:HTTPService id="myservice" url="xml/Books.xml" result="myservice_resultHandler(event)" resultFormat="e4x"/>
+    </fx:Declarations>
+    
+    <fx:Script source="/com/gmap/practice/actionscript/Practice.as"/>
+    <fx:Style source="/commons/stylesheets/Practice.css"/>
+    
+    <s:VGroup id="mainContent" width="100%" height="100%" horizontalAlign="center">
+        <s:HGroup width="100%" height="20%" horizontalAlign="right" paddingRight="10" paddingTop="20">            
+            <s:Button label="Add Item" click="addItem(event)"/>
+            <s:Button label="Save All Changes" click="saveItems()"/>
+            <s:Button label="Edit Item" click="editItem()"/>
+            <s:Button label="Disable Edit" click="disableEdit()"/>
+            <s:Button label="Delete Item" click="deleteItem()"/>
+        </s:HGroup>
+        
+        <!--change dataprovider to _xmlCollection if wanted to use httpservice-->
+        <mx:AdvancedDataGrid allowMultipleSelection="true" id="adg" height="75%" width="70%" editable="false" dataProvider="{booksCollection}" >
+            <mx:columns>
+                <mx:AdvancedDataGridColumn dataField="@genre" headerText="Genre" width="40">
+                    <mx:itemEditor>
+                        <fx:Component>
+                            <mx:ComboBox openDuration="400" alternatingItemColors="[0xfdfacf,0xd5f3ff]" dataProvider="{outerDocument.arrGenre}" selectedIndex="0"/>
+                        </fx:Component>
+                    </mx:itemEditor>
+                    </mx:AdvancedDataGridColumn>
+                <mx:AdvancedDataGridColumn dataField="@type" headerText="Type" width="30">
+                    <mx:itemEditor>
+                        <fx:Component>
+                            <mx:ComboBox openDuration="400" alternatingItemColors="[0xcfdce9,0xd5f3ff]" dataProvider="{outerDocument.arrType}" selectedIndex="0"/>
+                        </fx:Component>
+                    </mx:itemEditor>
+                </mx:AdvancedDataGridColumn>
+                <mx:AdvancedDataGridColumn dataField="@name" headerText="Name" width="70"/>
+            </mx:columns>
+        </mx:AdvancedDataGrid>
+    </s:VGroup>
+<!--    <mx:ComboBox openDuration="1000"
+                 openEasingFunction="Bounce.easeOut"
+                 closeDuration="1000"
+                 closeEasingFunction="Bounce.easeIn" dataProvider="{arrGenre}"/>-->
+</s:WindowedApplication>

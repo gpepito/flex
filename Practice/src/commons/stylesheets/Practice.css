@@ -1,0 +1,12 @@
+/* CSS file */
+@namespace s "library://ns.adobe.com/flex/spark";
+@namespace mx "library://ns.adobe.com/flex/mx";
+
+.paddingTop10 {
+    gutterTop:10;
+}
+/*
+.busyBar{
+    backgroundImage:Embed("/../../commons/images/spinner_blue.gif");
+}*/
+
