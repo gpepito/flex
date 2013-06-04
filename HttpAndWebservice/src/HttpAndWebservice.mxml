@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:WindowedApplication xmlns:fx="http://ns.adobe.com/mxml/2009" 
+                       xmlns:s="library://ns.adobe.com/flex/spark" 
+                       xmlns:mx="library://ns.adobe.com/flex/mx" xmlns:components="components.*" applicationComplete="initial(event)">
+    <fx:Declarations>        
+        <s:HTTPService id="loginRequest" requestTimeout="3000" resultFormat="text" showBusyCursor="true" fault="loginRequestfaultHandler(event)" result="loginRequestHandler(event)" url="http://gladys.nerubia.com:3000/login.json" method="GET">
+            <s:request xmlns="">
+                <user_name>{loginForm.username}</user_name>
+                <password>{_encryptPassword}</password>
+            </s:request>
+        </s:HTTPService>
+        <s:WebService fault="webservice_faultHandler(event)" id="webservice" wsdl="http://www.adobetes.com/f4iaw100/remoteData/employeeData.cfc?wsdl" result="webservice_resultHandler(event)"/>
+    </fx:Declarations>
+    <fx:Script>
+        <![CDATA[
+            import com.adobe.crypto.MD5;
+            
+            import mx.collections.ArrayCollection;
+            import mx.controls.Alert;
+            import mx.events.FlexEvent;
+            import mx.rpc.events.FaultEvent;
+            import mx.rpc.events.ResultEvent;
+            
+            [Bindable]private var _encryptPassword:String="";
+            private var _employees:ArrayCollection=new ArrayCollection();
+            protected function login():void
+            {                
+              loginForm.invalidate=false;
+              _encryptPassword= MD5.hash(loginForm.password);
+                loginRequest.send();
+            }
+            
+            protected function loginRequestHandler(event:ResultEvent):void
+            {
+                var jsonObj:Object=JSON.parse(event.result.toString());
+                ServiceApplication.instance.empId=jsonObj.emp_number;
+                
+                currentState="adminState";
+                admin.init();
+                
+            }
+            
+            protected function loginRequestfaultHandler(event:FaultEvent):void
+            {
+                Alert.show("Invalid Credentials");
+                trace("Invalid Credentials");
+            }
+            private function logout():void{      
+                
+                currentState="loginState";
+                trace("logout");
+                loginForm.username="";
+                loginForm.password=""; 
+                loginForm.txtUsername.text="";
+                loginForm.txtPassword.text=""; 
+                loginForm.invalidate=true;
+            }
+            
+             protected function webservice_resultHandler(event:ResultEvent):void
+            {
+                    employees=event.result as ArrayCollection;
+
+            }
+            
+            protected function initial(event:FlexEvent):void
+            {
+              webservice.getEmployees();    
+            }
+            
+            protected function webservice_faultHandler(event:FaultEvent):void
+            {
+             trace(event.fault.faultDetail);
+            } 
+
+            [Bindable]
+            public function get employees():ArrayCollection
+            {
+                return _employees;
+            }
+
+            public function set employees(value:ArrayCollection):void
+            {
+                _employees = value;
+            }
+
+            
+        ]]>
+    </fx:Script>
+    <s:states>       
+        <s:State name="webserviceState" />
+        <s:State name="loginState" />
+        <s:State name="adminState"/>
+    </s:states>
+    
+    <s:VGroup width="100%" height="100%" verticalAlign="middle" horizontalAlign="center">  
+        <s:DropDownList dataProvider="{employees}" includeIn="webserviceState" id="ddlist" labelField="LASTNAME"/>
+        <components:LoginForm id="loginForm" includeIn="loginState" loginClicked="login()"/>
+        <components:DisplayComp id="admin" includeIn="adminState" logoutClicked="logout()"/>
+    </s:VGroup>
+                   
+</s:WindowedApplication>

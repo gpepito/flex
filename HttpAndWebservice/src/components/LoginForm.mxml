@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+         xmlns:s="library://ns.adobe.com/flex/spark" 
+         xmlns:mx="library://ns.adobe.com/flex/mx" width="454" height="272" creationComplete="init()">
+    <fx:Metadata>
+        [Event(name="loginClicked", type="flash.events.Event")]
+    </fx:Metadata>
+    
+    
+    <fx:Script>
+        <![CDATA[
+            
+            import mx.events.ValidationResultEvent;
+            import mx.validators.ValidationResult;
+            [Bindable] private var _username:String,_password:String;
+            [Bindable] private var _userValidator:CustomValidator;
+            [Bindable] private var _passwordValidator:CustomValidator;
+                       private var _invalidate:Boolean;
+                       private var _enableValidator:Boolean;
+            
+            [Bindable]
+            public function get invalidate():Boolean
+            {
+                return _invalidate;
+            }
+
+            public function set invalidate(value:Boolean):void
+            {
+                trace("invalidate::",value);
+                _userValidator.enabled=!value;
+                _passwordValidator.enabled=!value;
+                _userValidator.validator.dispatchEvent(new ValidationResultEvent(ValidationResultEvent.VALID));
+                _passwordValidator.validator.dispatchEvent(new ValidationResultEvent(ValidationResultEvent.VALID));               
+                _invalidate = value;
+            }
+
+            public function init():void{
+                _userValidator=new CustomValidator();
+                _userValidator.field=txtUsername;
+                _passwordValidator=new CustomValidator();
+                _passwordValidator.field=txtPassword;
+            }
+            public function get password():String
+            {
+                
+                return _password;
+            }
+            
+            public function set password(value:String):void
+            {
+                _password = value;
+            }
+            
+            [Bindable]
+            public function get username():String
+            {
+                return _username;
+            }
+            
+            public function set username(value:String):void
+            {
+                _username = value;
+            }
+
+
+            
+        ]]>
+    </fx:Script>
+    
+    <s:layout>
+        <s:VerticalLayout verticalAlign="middle" horizontalAlign="center"/>
+    </s:layout>
+    
+    <s:BorderContainer width="95%" height="95%" backgroundAlpha="0" cornerRadius="15.0">
+        <s:layout>
+            <s:VerticalLayout verticalAlign="middle" horizontalAlign="center"/>
+        </s:layout>
+        
+        <s:Form id="loginForm" width="386" height="121" backgroundAlpha="0" >
+            <s:FormItem width="368" label="Username:" required="true" sequenceLabel="1." styleName="formItem">
+                <s:helpContent>
+                    <s:Label text="user1234"/>
+                </s:helpContent>
+                <s:TextInput id="txtUsername" focusOut="username=txtUsername.text,_userValidator.enabled=true" width="151" maxChars="10" 
+                             alpha="0.5" />
+            </s:FormItem>
+            <s:FormItem width="368" sequenceLabel="2." label="Password:" required="true" styleName="formItem">
+                <s:helpContent>
+                    <s:Label text="password123"/>
+                </s:helpContent>
+                <s:TextInput id="txtPassword" focusOut="password=txtPassword.text, _passwordValidator.enabled=true" width="149" 
+                             displayAsPassword="true" maxChars="40" alpha="0.5" />
+            </s:FormItem>
+        </s:Form>
+        
+        <s:Button id="login" label="Log In" horizontalCenter="0" verticalCenter="74" click="dispatchEvent(new Event('loginClicked'))"/>
+    </s:BorderContainer>
+    
+</s:Group>
