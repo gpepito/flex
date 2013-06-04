@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:WindowedApplication xmlns:fx="http://ns.adobe.com/mxml/2009"
+                       xmlns:s="library://ns.adobe.com/flex/spark"
+                       xmlns:mx="library://ns.adobe.com/flex/mx"
+                       creationComplete="initialFocus()"
+                       width="800"
+                       height="350">
+    <s:layout>
+        <s:FormLayout verticalAlign="middle" horizontalAlign="center" />
+    </s:layout>
+    <fx:Script source="Main.as"/>
+    <fx:Declarations>
+        <!--all validators-->
+        <mx:Validator id="txtYesNo_validator" source="{txtYesNo}" 
+                      valid="validYesNo=true" 
+                      invalid="validYesNo=false" 
+                      property="text" 
+                      requiredFieldError="Required field" />
+        <s:NumberValidator id="txtQty_validator" 
+                           valid="setResult(0,true)" 
+                           invalid="setResult(0,false)" 
+                           maxValue="99999"
+                           domain="int"
+                           source="{txtQuantity}" 
+                           property="text" 
+                           allowNegative="false" 
+                           requiredFieldError="Required field"/>
+        <s:NumberValidator id="txtFeet_validator" 
+                           valid="setResult(1,true)" 
+                           invalid="setResult(1,false)" 
+                           source="{txtFeet}" property="text"  
+                           allowNegative="false" 
+                           requiredFieldError="Required field" 
+                           maxValue="999" 
+                           domain="int" 
+                           enabled="false"/>
+        <s:NumberValidator id="txtInches_validator" 
+                           valid="setResult(2,true)" 
+                           invalid="setResult(2,false)" 
+                           source="{txtInches}" 
+                           property="text" 
+                           allowNegative="false" 
+                           requiredFieldError="Required field" 
+                           maxValue="11.9999" fractionalDigits="4" 
+                           domain="real" enabled="false"/>
+        <s:CurrencyFormatter id="formatResult" 
+                             currencySymbol="$" 
+                             useGrouping="true" 
+                             fractionalDigits="4"
+                             useCurrencySymbol="true" />
+        <s:NumberFormatter id="formatInches"
+                           fractionalDigits="4"
+                           trailingZeros="true"
+                           />
+        <s:NumberFormatter id="formatQuantity"
+                           fractionalDigits="3"
+                           trailingZeros="true"/>
+    </fx:Declarations>  
+    <s:Form>        
+        <s:layout>
+            <s:FormLayout gap="-20" />
+        </s:layout>
+        <s:Form >
+            <s:layout>
+                <s:HorizontalLayout/>
+            </s:layout>
+            <s:FormItem id="lblYesNo" label="Yes No" skinClass="customFormItem">
+                <s:TextInput id="txtYesNo" focusIn="highlightText(txtYesNo)"
+                             maxChars="3" tabIndex="1" focusOut="txtYesNoFocusOut(event)" 
+                             keyDown="keypress(event)"/>
+            </s:FormItem>
+            <s:FormItem>
+                <s:Button id="btnYesNo" label="..." click="popUpYesNo()"/>
+            </s:FormItem>            
+        </s:Form>
+        
+        <s:Form>
+            <s:layout>
+                <s:HorizontalLayout/>
+            </s:layout>
+            <s:FormItem id="lblItemType" label="Item Type" skinClass="customFormItem">
+                <s:DropDownList id="cboItemType" width="146" change="selectedItemType()"
+                                dataProvider="{arrItemType}" focusOut="nextFocus(event)"
+                                selectedIndex="2" tabIndex="2"/>
+            </s:FormItem>
+            <s:FormItem/>
+        </s:Form>
+        
+        <s:Form>
+            <s:layout>
+                <s:HorizontalLayout/>
+            </s:layout>
+            <s:FormItem id="lblFeet" label="Feet" skinClass="customFormItem">
+                <s:TextInput id="txtFeet" tabIndex="3" focusIn="highlightText(txtFeet)" 
+                             focusOut="nextFocus(event)" change="computeResult()" restrict="0-9,"/>   
+            </s:FormItem > 
+            
+            <s:FormItem id="lblInches" label="Inches" skinClass="customFormItem">
+                <s:TextInput id="txtInches" tabIndex="4" focusIn="highlightText(txtInches)" 
+                             focusOut="nextFocus(event)" change="computeResult()" restrict="0-9,"/>
+            </s:FormItem>  
+        </s:Form>
+        <s:Form>
+            <s:layout>
+                <s:HorizontalLayout/>
+            </s:layout>
+            <s:FormItem id="lblQuantity" label="Quantity" skinClass="customFormItem">
+                <s:TextInput id="txtQuantity"  focusOut="format()" focusIn="highlightText(txtQuantity)" tabIndex="6"  
+                             change="computeResult()" restrict="0-9,"/>
+            </s:FormItem >
+            <s:FormItem>
+                <s:DropDownList id="cboQuantity" dataProvider="{arrQuantity}" tabIndex="5" selectedIndex="0" 
+                                close="txtQty_validator.validate()" change="checkQtyOpt()"/>
+            </s:FormItem>
+        </s:Form>
+        <s:Form>
+            <s:layout>
+                <s:HorizontalLayout/>
+            </s:layout>
+            <s:FormItem id="lblExtended" width="84" label="Extended">
+                <s:Label id="lblExtendedValue" paddingLeft="15" text="{strResult}"
+                         verticalAlign="middle"/>
+            </s:FormItem>
+          <!--  <s:FormItem id="lblExtendedValue" label="{strResult}" textAlign="left"/>-->
+        </s:Form>
+        
+        <s:Form>
+            <s:layout>
+                <s:HorizontalLayout/>
+            </s:layout>
+            <s:FormItem skinClass="customFormItem">
+                <s:Button id="btnCheckForm" label="Check Form" click="submitForm()"/>
+            </s:FormItem>
+        </s:Form>
+    </s:Form>
+    
+    <!--   <s:Label id="lblYesNo" y="49" left="55" width="45" text="Yes No" textAlign="left"/>
+    <s:TextInput id="txtYesNo" x="121" y="45" width="57" focusIn="highlightText(txtYesNo)"
+    maxChars="3" tabIndex="1" focusOut="txtYesNo_validator.enabled=true" 
+    keyDown="keypress(event)"/>
+    <s:Button id="btnYesNo" x="182" y="45" width="39" label="..." click="popUpYesNo()"/>
+    
+    <s:Label id="lblItemType" x="55" y="88" text="Item Type" textAlign="left"/>
+    <s:DropDownList id="cboItemType" x="121" y="84" tabIndex="2" selectedIndex="2" 
+    focusOut="nextFocus(event)" change="selectedItemType()" 
+    dataProvider="{arrItemType}"/>
+    
+    <s:Label id="lblFeet" x="55" y="128" text="Feet" textAlign="left"/>
+    <s:TextInput id="txtFeet" x="121" y="124" tabIndex="3" focusIn="highlightText(txtFeet)" 
+    focusOut="nextFocus(event)" change="computeResult()"/>
+    <s:Label id="lblInches" x="257" y="128" text="Inches"/>
+    <s:TextInput id="txtInches" x="303" y="124" tabIndex="4" focusIn="highlightText(txtInches)" 
+    focusOut="nextFocus(event)" change="computeResult()"/>
+    
+    <s:Label id="lblQuantity" x="55" y="169" text="Quantity" textAlign="left"/>
+    <s:TextInput id="txtQuantity" x="121" y="169" focusOut="format()" focusIn="highlightText(txtQuantity)" tabIndex="6"  
+    change="computeResult()"/>
+    <s:DropDownList id="cboQuantity" dataProvider="{arrQuantity}" tabIndex="5" selectedIndex="0" 
+    close="txtQty_validator.validate()"  x="256" y="168" change="checkQtyOpt()"/>
+    
+    <s:Label id="lblExtended" x="55" y="216" text="Extended" textAlign="left" verticalAlign="justify"/>
+    <s:Label id="lblExtendedValue" x="121" y="207" width="310" height="21" text="{strResult}"
+    verticalAlign="bottom"/>
+    
+    <s:Button id="btnCheckForm" x="121" y="251" label="Check Form" click="submitForm()"/>-->
+    
+</s:WindowedApplication>
